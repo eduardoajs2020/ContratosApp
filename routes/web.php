@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ContratoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +14,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+//Raiz
+Route::get('/', [ContratoController::class, 'index'])->name('home');
+
+//Formularios
+
+Route::get('/contratos', [ContratoController::class, 'index'])->name('contratos.index');
+Route::get('/contratos/{id}', [ContratoController::class, 'show'])->name('contratos.show');
+Route::get('/contratos/{id}/edit', [ContratoController::class, 'edit'])->name('contratos.edit');
+Route::put('/contratos/{id}', [ContratoController::class, 'update'])->name('contratos.update');
+Route::delete('/contratos/{id}', [ContratoController::class, 'destroy'])->name('contratos.destroy');
+Route::post('/exportar-csv', [ContratoController::class, 'exportarCSV'])->name('contratos.exportarCSV');
+

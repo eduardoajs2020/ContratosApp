@@ -6,11 +6,8 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateContratosTable extends Migration
 {
-    /**
-     * Run the migrations.
-     * @return void
-     */
-    public function up(): void
+
+    public function up()
     {
         Schema::create('contratos', function (Blueprint $table) {
             $table->id('NU_NUMERO_CONTRATO');
@@ -31,12 +28,8 @@ class CreateContratosTable extends Migration
             $table->timestamps();
         });
     }
-
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::dropIfExists('contratos');
     }
-};
+}
