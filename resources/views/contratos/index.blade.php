@@ -24,9 +24,10 @@
         <br>
 
         {{-- Formulário de Filtros --}}
-        <a href="{{ route('contratos.index') }}" class="btn btn-primary">Listar Todos os Contratos</a>         {{-- Formulário de Filtros --}}
-        <form method="GET" action="{{ route('contratos.index') }}" class="mb-4">
-        <br>
+        <a href="{{ route('contratos.index') }}" class="btn btn-primary">Listar Todos os Contratos</a>         
+        
+        {{-- Formulário de Filtros --}}
+        <br><br>
         <form method="GET" action="{{ route('contratos.index') }}" class="mb-4">
             <div class="row">
                 <div class="col">
