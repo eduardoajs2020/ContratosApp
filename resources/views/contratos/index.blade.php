@@ -5,10 +5,28 @@
 @section('title', 'Lista de Contratos')
 
 @section('content')
+
+
+<h1>Novos Contratos para Carga </h1>
+    <br>
+    <div>
+        <form action="{{ route('contratos.importar-csv') }}" method="post" enctype="multipart/form-data">
+            @csrf
+            <label for="arquivo_csv">Selecione o arquivo para a importação, no formato CSV:</label>
+            <input type="file" id="arquivo_csv" name="arquivo_csv" required>
+            <button type="submit" class="btn btn-primary">Importar CSV</button>
+        </form>
+    </div>
+    <br><br>
+
     <div class="container">
-        <h1>Contratos</h1>
+        <h1>Pesquisa de Contratos</h1>
+        <br>
 
         {{-- Formulário de Filtros --}}
+        <a href="{{ route('contratos.index') }}" class="btn btn-primary">Listar Todos os Contratos</a>         {{-- Formulário de Filtros --}}
+        <form method="GET" action="{{ route('contratos.index') }}" class="mb-4">
+        <br>
         <form method="GET" action="{{ route('contratos.index') }}" class="mb-4">
             <div class="row">
                 <div class="col">
@@ -69,49 +87,9 @@
         {{-- Paginação --}}
         {{ $contratos->links() }}
     </div>
-@endsection
 
-@section('total')
 
-<!DOCTYPE html>
-    <html lang="pt-br">
-    <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Exportar para CSV</title>
-      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    </head>
-    <body>
-      <div class="container mt-3">
-        <h1>Exportar para CSV</h1>
-
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th>Coluna1</th>
-              <th>Coluna2</th>
-              </tr>
-          </thead>
-          <tbody>
-          </tbody>
-        </table>
-
-        <div class="mt-3">
-          <button class="btn btn-primary" id="selectAllBtn">Selecionar Todos</button>
-          <a href="{{ route('exportar-csv',  $contrato->id)) }}" class="btn btn-success">Exportar para CSV</a>
-        </div>
-      </div>
-
-      <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-
-      <script>
-        $(document).ready(function() {
-          $('#selectAllBtn').click(function() {
-            $('input[type="checkbox"]').prop('checked', true);
-          });
-        });
-      </script>
 
 @endsection
+
+

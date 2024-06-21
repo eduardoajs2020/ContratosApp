@@ -121,4 +121,46 @@ class ContratoController extends Controller
         return response()->download('export.csv');
     }
 
+    public function importarCSV(Request $request)
+{
+    // Validar o arquivo CSV
+    $request->validate([
+        'arquivo_csv' => 'required|file|mimes:csv',
+    ]);
+
+    // Obter o arquivo CSV
+    $arquivoCSV = $request->file('arquivo_csv');
+
+    // Ler o conteúdo do arquivo CSV
+    $dadosCSV = [];
+    if (($handle = fopen($arquivoCSV->getRealPath(), 'r')) !== FALSE) {
+        while (($data = fgetcsv($handle, 1000, ',')) !== FALSE) {
+            $dadosCSV[] = $data;
+        }
+        fclose($handle);
+    }
+
+    // Remover a primeira linha do CSV (cabeçalho)
+    array_shift($dadosCSV);
+
+    // Mapear os dados do CSV para o modelo Contrato
+    $contratos = [];
+    
+    foreach ($dadosCSV as $linha) {
+        $contrato = new Contrato();
+        $contrato->NU_NUMERO_CONTRATO = $linha[0]; // Substituir por índices corretos
+        $contrato->DT_DATA_ASSINATURA = $linha[1]; // Substituir por índices corretos
+        $contrato->NU_VALOR_FINANCIAMENTO = $linha[2]; // Substituir por índices corretos
+        // ... (mapear outros campos)
+        $contratos[] = $contrato;
+    }
+
+    // Salvar os contratos no banco de dados
+    Contrato::insert($contratos);
+
+    // Retornar mensagem de sucesso
+    return redirect()->route('contratos.index')->with('success', 'Contratos importados com sucesso.');
+    }
+
+
 }

@@ -24,5 +24,7 @@ Route::get('/contratos/{id}', [ContratoController::class, 'show'])->name('contra
 Route::get('/contratos/{id}/edit', [ContratoController::class, 'edit'])->name('contratos.edit');
 Route::put('/contratos/{id}', [ContratoController::class, 'update'])->name('contratos.update');
 Route::delete('/contratos/{id}', [ContratoController::class, 'destroy'])->name('contratos.destroy');
-Route::post('/exportar-csv', [ContratoController::class, 'exportarCSV'])->name('contratos.exportarCSV');
+Route::post('/contratos/exportar-csv', [ContratoController::class, 'exportarCSV'])->name('contratos.exportarCSV');
+Route::post('/contratos/importar-csv', [ContratoController::class, 'importarCSV'])->name('contratos.importar-csv');
+
 
