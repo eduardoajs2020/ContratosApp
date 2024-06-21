@@ -145,13 +145,23 @@ class ContratoController extends Controller
 
     // Mapear os dados do CSV para o modelo Contrato
     $contratos = [];
-    
+
     foreach ($dadosCSV as $linha) {
         $contrato = new Contrato();
-        $contrato->NU_NUMERO_CONTRATO = $linha[0]; // Substituir por índices corretos
-        $contrato->DT_DATA_ASSINATURA = $linha[1]; // Substituir por índices corretos
-        $contrato->NU_VALOR_FINANCIAMENTO = $linha[2]; // Substituir por índices corretos
-        // ... (mapear outros campos)
+        $contrato->NU_NUMERO_CONTRATO       = $linha[0];
+        $contrato->DT_DATA_ASSINATURA       = $linha[1];
+        $contrato->NU_VALOR_FINANCIAMENTO   = $linha[2];
+        $contrato->NU_TAXA_JUROS            = $linha[3];
+        $contrato->NU_PRAZO_CARENCIA        = $linha[4];
+        $contrato->NO_NOME_MUTUARIO         = $linha[5];
+        $contrato->NU_NUMERO_IDENTIDADE     = $linha[6];
+        $contrato->DT_DATA_NASCIMENTO       = $linha[7];
+        $contrato->NO_ESTADO_CIVIL          = $linha[8];
+        $contrato->NO_SEXO                  = $linha[9];
+        $contrato->NO_UF                    = $linha[10];
+        $contrato->NO_MUNICIPIO             = $linha[11];
+        $contrato->NO_ENDERECO              = $linha[12];
+        $contrato->NU_CEP                   = $linha[13];
         $contratos[] = $contrato;
     }
 
