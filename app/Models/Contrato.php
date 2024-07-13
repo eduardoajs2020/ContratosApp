@@ -25,4 +25,16 @@ class Contrato extends Model
         'NO_ENDERECO',
         'NU_CEP'
     ];
+
+    protected $table = 'contratos';
+
+    // Defina a chave primária, caso não seja 'id'
+    protected $primaryKey = 'NU_NUMERO_CONTRATO'; // Exemplo de chave primária diferente
+
+    // Se a chave primária não for auto-incremento, defina $incrementing como false
+    public $incrementing = false;
+
+    // Se a chave primária não for um inteiro, defina $keyType como 'string'
+    protected $keyType = 'string';
 }
+

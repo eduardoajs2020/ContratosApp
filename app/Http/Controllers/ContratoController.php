@@ -36,32 +36,35 @@ class ContratoController extends Controller
     }
 
     // Mostra um contrato específico
-    public function show($id)
+    
+
+    public function show($NU_NUMERO_CONTRATO, Request $request)
     {
-        $contrato = Contrato::findOrFail($id);
+      
+        $contrato = Contrato::findOrFail($NU_NUMERO_CONTRATO);
         return view('contratos.show', compact('contrato'));
     }
 
     // Mostra o formulário de edição
-    public function edit($id)
+    public function edit($NU_NUMERO_CONTRATO)
     {
-        $contrato = Contrato::findOrFail($id);
+        $contrato = Contrato::findOrFail($NU_NUMERO_CONTRATO);
         return view('contratos.edit', compact('contrato'));
     }
 
     // Atualiza um contrato específico
-    public function update(Request $request, $id)
+    public function update(Request $request, $NU_NUMERO_CONTRATO)
     {
-        $contrato = Contrato::findOrFail($id);
+        $contrato = Contrato::findOrFail($NU_NUMERO_CONTRATO);
         $contrato->update($request->all());
 
         return redirect()->route('contratos.index')->with('success', 'Contrato atualizado com sucesso.');
     }
 
     // Exclui um contrato específico
-    public function destroy($id)
+    public function destroy($NU_NUMERO_CONTRATO)
     {
-        $contrato = Contrato::findOrFail($id);
+        $contrato = Contrato::findOrFail($NU_NUMERO_CONTRATO);
         $contrato->delete();
 
         return redirect()->route('contratos.index')->with('success', 'Contrato excluído com sucesso.');

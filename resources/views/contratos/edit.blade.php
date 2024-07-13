@@ -6,7 +6,7 @@
     <div class="container">
         <h1>Editar Contrato</h1>
 
-        <form action="{{ route('contratos.update', $contrato->id) }}" method="POST">
+        <form action="{{ route('contratos.update', $contrato->NU_NUMERO_CONTRATO) }}" method="POST">
             @csrf
             @method('PUT')
 
@@ -31,7 +31,7 @@
                 <input type="text" name="NU_NUMERO_IDENTIDADE" class="form-control" value="{{ $contrato->NU_NUMERO_IDENTIDADE }}" required>
             </div>
             {{-- Não esquecer de adicionar os outros campos --}}
-            <button type="submit" class="btn btn-success">Salvar Alterações</button>
+            <button type="submit" class="btn btn-success" onclick="return confirm('Alteração realizada com sucesso!')">Salvar Alterações</button>
             <a href="{{ route('contratos.index') }}" class="btn btn-primary">Cancelar</a>
         </form>
     </div>

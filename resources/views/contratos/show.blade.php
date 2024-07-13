@@ -58,8 +58,8 @@
         </table>
 
         <a href="{{ route('contratos.index') }}" class="btn btn-primary">Voltar</a>
-        <a href="{{ route('contratos.edit', $contrato->id) }}" class="btn btn-warning">Alterar</a>
-        <form action="{{ route('contratos.destroy', $contrato->id) }}" method="POST" style="display:inline;">
+        <a href="{{ route('contratos.edit', $contrato->NU_NUMERO_CONTRATO) }}" class="btn btn-warning">Alterar</a>
+        <form action="{{ route('contratos.destroy', $contrato->NU_NUMERO_CONTRATO) }}" method="POST" style="display:inline;">
             @csrf
             @method('DELETE')
             <button type="submit" class="btn btn-danger" onclick="return confirm('Tem certeza que deseja excluir este contrato?')">Excluir</button>

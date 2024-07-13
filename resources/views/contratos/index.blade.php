@@ -72,9 +72,9 @@
                         <td>{{ $contrato->NU_CPF }}</td>
                         <td>{{ $contrato->NU_NUMERO_IDENTIDADE }}</td>
                         <td>
-                            <a href="{{ route('contratos.show', $contrato->id) }}" class="btn btn-info">Visualizar</a>
-                            <a href="{{ route('contratos.edit', $contrato->id) }}" class="btn btn-warning">Alterar</a>
-                            <form action="{{ route('contratos.destroy', $contrato->id) }}" method="POST" style="display:inline;">
+                            <a href="{{ route('contratos.show', $contrato->NU_NUMERO_CONTRATO) }}" class="btn btn-info">Visualizar</a>
+                            <a href="{{ route('contratos.edit', $contrato->NU_NUMERO_CONTRATO) }}" class="btn btn-warning">Alterar</a>
+                            <form action="{{ route('contratos.destroy', $contrato->NU_NUMERO_CONTRATO) }}" method="POST" style="display:inline;">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger" onclick="return confirm('Tem certeza que deseja excluir este contrato?')">Excluir</button>
