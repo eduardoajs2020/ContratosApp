@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Contrato;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 class ContratoController extends Controller
 
@@ -36,11 +37,11 @@ class ContratoController extends Controller
     }
 
     // Mostra um contrato específico
-    
+
 
     public function show($NU_NUMERO_CONTRATO, Request $request)
     {
-      
+
         $contrato = Contrato::findOrFail($NU_NUMERO_CONTRATO);
         return view('contratos.show', compact('contrato'));
     }
@@ -68,6 +69,11 @@ class ContratoController extends Controller
         $contrato->delete();
 
         return redirect()->route('contratos.index')->with('success', 'Contrato excluído com sucesso.');
+    }
+
+    public function head()
+    {
+        return Route::view('web/contratos.head');
     }
 
     public function exportarCSV()
@@ -120,9 +126,14 @@ class ContratoController extends Controller
         // Fechar o arquivo CSV
         fclose($arquivoCSV);
 
-        // Redirecionar para o download do arquivo CSV
-        return response()->download('export.csv');
-    }
+        // Configurar o cabeçalho para o download do arquivo CSV
+        return response()->streamDownload(function() use ($arquivoCSV) {
+            fpassthru($arquivoCSV);
+            }, 'export.csv', [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="export.csv"',
+        ]);
+}
 
     public function importarCSV(Request $request)
 {
