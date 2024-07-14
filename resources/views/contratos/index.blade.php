@@ -36,8 +36,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('contratos.head') }}">Relatórios</a>
-
+                    <a class="nav-link" href=" {{ route('home') }} ">Relatórios</a>
                 </li>
 
             </ul>

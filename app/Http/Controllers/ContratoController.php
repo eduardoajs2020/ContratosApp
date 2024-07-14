@@ -71,10 +71,7 @@ class ContratoController extends Controller
         return redirect()->route('contratos.index')->with('success', 'Contrato excluído com sucesso.');
     }
 
-    public function head()
-    {
-        return Route::view('web/contratos.head');
-    }
+   
 
     public function exportarCSV()
     {
