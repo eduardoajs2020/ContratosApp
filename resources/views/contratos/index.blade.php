@@ -32,7 +32,7 @@
                     <a class="nav-link" href="#">Contratos</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('contratos.head') }}">Importar Contratos</a>
+                    <a class="nav-link" href="{{ route('contratos.importArchive') }}">Importar Contratos</a>
                 </li>
 
                 <li class="nav-item">
@@ -108,7 +108,7 @@
             </tbody>
         </table>
         <div class="mt-3">
-            <form action="{{ route('contratos.exportarCSV') }}" method="get">
+            <form action="{{ route('contratos.exportarCSV') }}" method="GET">
                 @csrf
                 <button type="submit" class="btn btn-primary">Exportar Contratos para CSV</button>
             </form>
@@ -120,7 +120,7 @@
     <div class="d-flex justify-content-center">
         {{ $contratos->links('pagination::bootstrap-4') }}
     </div>
-    @include('contratos.head')
+    @include('contratos.imports')
 </div>
 
 @endsection

@@ -1,21 +1,20 @@
+
+<!--{{-- resources/views/contratos/imports.blade.php --}}
+
+@extends('layouts.app')-->
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/style.css">
     <title>Sistema de Gestão de Contratos</title>
 </head>
-
-{{-- resources/views/contratos/head.blade.php --}}
-
-@extends('layouts.app')
-
 
 
 <div class="card p-4 mb-4">
     <h1 class="mb-4">Adicionar novos Contratos </h1>
 
     <form action="{{ route('contratos.importar-csv') }}" method="post" enctype="multipart/form-data">
-        @csrf
+
+      @csrf
         <div class="form-group">
 
             <label for="arquivo_csv">Selecione um arquivo no formato CSV para a importação:</label>

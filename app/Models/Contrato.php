@@ -10,6 +10,7 @@ class Contrato extends Model
     use HasFactory;
 
     protected $fillable = [
+        'NU_NUMERO_CONTRATO',
         'DT_DATA_ASSINATURA',
         'NU_VALOR_FINANCIAMENTO',
         'NU_TAXA_JUROS',

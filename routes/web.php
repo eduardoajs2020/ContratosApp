@@ -14,11 +14,16 @@ Route::get   ('/contratos/{id}',          [ContratoController::class, 'show'    
 Route::get   ('/contratos/{id}/edit',     [ContratoController::class, 'edit'       ])->name('contratos.edit'        );
 Route::put   ('/contratos/{id}',          [ContratoController::class, 'update'     ])->name('contratos.update'      );
 Route::delete('/contratos/{id}',          [ContratoController::class, 'destroy'    ])->name('contratos.destroy'     );
-Route::post  ('/contratos/exportar-csv',  [ContratoController::class, 'exportarCSV'])->name('contratos.exportarCSV' );
+Route::get   ('/contratos/exportar-csv',  [ContratoController::class, 'exportarCSV'])->name('contratos.exportarCSV' );
 Route::post  ('/contratos/importar-csv',  [ContratoController::class, 'importarCSV'])->name('contratos.importar-csv');
+Route::get   ('/mostrarTabela',           [ContratoController::class, 'mostrarTabela'])->name('contratos.importarParaBanco');
 
 //Views
-Route::get   ('/head',                    [FrontController::class, 'head'          ])->name('contratos.head'        );
+Route::get   ('/importArchive',           [FrontController::class, 'importArchive' ])->name('importArchive'         );
+Route::post  ('/importarCSV',             [FrontController::class, 'importarCSV'   ])->name('importarCSV'           );
+Route::get   ('/exportarCSV',             [FrontController::class, 'exportarCSV'   ])->name('exportarCSV'           );
+Route::get   ('/exportarPDF',             [FrontController::class, 'exportarPDF'   ])->name('exportarPDF'           );
+Route::get   ('/exportarHTML',            [FrontController::class, 'exportarHTML'  ])->name('exportarHTML'          );
 
 
 
