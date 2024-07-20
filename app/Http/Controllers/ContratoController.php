@@ -71,205 +71,137 @@ class ContratoController extends Controller
     }
 
     // Exporta dados para CSV
-    public function exportarCSV()
-    {
-        $contratos = Contrato::all();
-        $csv = $this->gerarCSV($contratos);
+public function exportarCSV()
+{
+    $contratos = Contrato::all();
+    $csv = $this->gerarCSV($contratos);
 
-        $headers = [
-            'Content-Type' => 'text/csv',
-            'Content-Disposition' => 'attachment; filename=contratos.csv',
-        ];
+    $headers = [
+        'Content-Type' => 'text/csv',
+        'Content-Disposition' => 'attachment; filename=contratos.csv',
+    ];
 
-        return Response::make($csv, 200, $headers);
+    return response($csv, 200, $headers);
+}
+
+// Gera o conteúdo do CSV
+private function gerarCSV($contratos)
+{
+    $headers = [
+        'NU_NUMERO_CONTRATO',
+        'DT_DATA_ASSINATURA',
+        'NU_VALOR_FINANCIAMENTO',
+        'NU_TAXA_JUROS',
+        'NU_PRAZO_CARENCIA',
+        'NO_NOME_MUTUARIO',
+        'NU_CPF',
+        'NU_NUMERO_IDENTIDADE',
+        'DT_DATA_NASCIMENTO',
+        'NO_ESTADO_CIVIL',
+        'NO_SEXO',
+        'NO_UF',
+        'NO_MUNICIPIO',
+        'NO_ENDERECO',
+        'NU_CEP'
+    ];
+
+    $output = fopen('php://temp', 'w');
+    fputcsv($output, $headers);
+
+    foreach ($contratos as $contrato) {
+        fputcsv($output, [
+            $contrato->NU_NUMERO_CONTRATO,
+            $contrato->DT_DATA_ASSINATURA,
+            $contrato->NU_VALOR_FINANCIAMENTO,
+            $contrato->NU_TAXA_JUROS,
+            $contrato->NU_PRAZO_CARENCIA,
+            $contrato->NO_NOME_MUTUARIO,
+            $contrato->NU_CPF,
+            $contrato->NU_NUMERO_IDENTIDADE,
+            $contrato->DT_DATA_NASCIMENTO,
+            $contrato->NO_ESTADO_CIVIL,
+            $contrato->NO_SEXO,
+            $contrato->NO_UF,
+            $contrato->NO_MUNICIPIO,
+            $contrato->NO_ENDERECO,
+            $contrato->NU_CEP
+        ]);
     }
 
-    // Gera o conteúdo do CSV
-    private function gerarCSV($contratos)
-    {
-        $headers = [
-            'NU_NUMERO_CONTRATO',
-            'DT_DATA_ASSINATURA',
-            'NU_VALOR_FINANCIAMENTO',
-            'NU_TAXA_JUROS',
-            'NU_PRAZO_CARENCIA',
-            'NO_NOME_MUTUARIO',
-            'NU_CPF',
-            'NU_NUMERO_IDENTIDADE',
-            'DT_DATA_NASCIMENTO',
-            'NO_ESTADO_CIVIL',
-            'NO_SEXO',
-            'NO_UF',
-            'NO_MUNICIPIO',
-            'NO_ENDERECO',
-            'NU_CEP'
-        ];
+    rewind($output);
+    $csv = stream_get_contents($output);
+    fclose($output);
 
-        $output = fopen('php://temp', 'w');
-        fputcsv($output, $headers);
+    return $csv;
+}
 
-        foreach ($contratos as $contrato) {
-            fputcsv($output, [
-                $contrato->NU_NUMERO_CONTRATO,
-                $contrato->DT_DATA_ASSINATURA,
-                $contrato->NU_VALOR_FINANCIAMENTO,
-                $contrato->NU_TAXA_JUROS,
-                $contrato->NU_PRAZO_CARENCIA,
-                $contrato->NO_NOME_MUTUARIO,
-                $contrato->NU_CPF,
-                $contrato->NU_NUMERO_IDENTIDADE,
-                $contrato->DT_DATA_NASCIMENTO,
-                $contrato->NO_ESTADO_CIVIL,
-                $contrato->NO_SEXO,
-                $contrato->NO_UF,
-                $contrato->NO_MUNICIPIO,
-                $contrato->NO_ENDERECO,
-                $contrato->NU_CEP
-            ]);
-        }
 
-        rewind($output);
-        $csv = stream_get_contents($output);
-        fclose($output);
+// Função para importar CSV
+public function importarCSV()
+{
+    if (request()->hasFile('arquivo_csv')) {
+        $arquivo = request()->file('arquivo_csv');
 
-        return $csv;
-    }
+        // Ler o conteúdo do CSV
+        $dadosCSV = $this->lerCSV($arquivo->path());
 
-    // Função para importar CSV
-    public function importarCSV()
-    {
-        if (request()->hasFile('arquivo_csv')) {
+        // Importar dados para o banco de dados
+        $this->importarParaBanco($dadosCSV);
 
-            $arquivo = request()->file('arquivo_csv');
-
-            // Ler o conteúdo do CSV
-            $dadosCSV = $this->lerCSV($arquivo->path());
-
-            // Importar dados para o banco de dados
-            $this->importarParaBanco($dadosCSV);
-
-            return response()->json(['sucesso' => true, 'mensagem' => 'Importação concluída!']);
+        return redirect()->route('contratos.index')->with('sucesso', 'Importação concluída!');
 
     } else {
-
-        return response()->json(['erro' => true, 'mensagem' => 'Selecione um arquivo para upload.']);
+         return redirect()->route('contratos.index')->with('erro', 'Selecione um arquivo para upload.');
     }
 }
 
-        // Função para ler o conteúdo do CSV
-    private function lerCSV($caminhoArquivo)
-    {
-            $dados = [];
-
+// Função para ler o conteúdo do CSV
+private function lerCSV($caminhoArquivo)
+{
+    $dados = [];
 
     if (($handle = fopen($caminhoArquivo, 'r')) !== FALSE) {
-
-        while (($data = fgetcsv($handle , 1000, ',')) !== FALSE) {
-
+        while (($data = fgetcsv($handle, 1000, ';')) !== FALSE) {
             $dados[] = $data;
-
         }
-
         fclose($handle);
     }
 
     return $dados;
-
 }
 
 // Função para importar dados para o banco de dados
 private function importarParaBanco($dadosCSV)
 {
-    // Formatar e inserir dados na tabela 'contratos'
+
+    // Remover a primeira linha (cabeçalho)
+
+    $cabecalho = array_shift($dadosCSV);
+
+
     foreach ($dadosCSV as $linha) {
 
-       // Remover a primeira linha (cabeçalho)
-        array_shift($dadosCSV);
-
-        $linhaModificada = str_replace(";",", ", $linha);
 
         $dadosContrato = [
-                'NU_NUMERO_CONTRATO',
-                'DT_DATA_ASSINATURA',
-                'NU_VALOR_FINANCIAMENTO',
-                'NU_TAXA_JUROS',
-                'NU_PRAZO_CARENCIA',
-                'NO_NOME_MUTUARIO',
-                'NU_CPF',
-                'NU_NUMERO_IDENTIDADE',
-                'DT_DATA_NASCIMENTO',
-                'NO_ESTADO_CIVIL',
-                'NO_SEXO',
-                'NO_UF',
-                'NO_MUNICIPIO',
-                'NO_ENDERECO',
-                'NU_CEP',
+            'NU_NUMERO_CONTRATO' => $linha[0],
+            'DT_DATA_ASSINATURA' => $linha[1],
+            'NU_VALOR_FINANCIAMENTO' => $linha[2],
+            'NU_TAXA_JUROS' => $linha[3],
+            'NU_PRAZO_CARENCIA' => $linha[4],
+            'NO_NOME_MUTUARIO' => $linha[5],
+            'NU_CPF' => $linha[6],
+            'NU_NUMERO_IDENTIDADE' => $linha[7],
+            'DT_DATA_NASCIMENTO' => $linha[8],
+            'NO_ESTADO_CIVIL' => $linha[9],
+            'NO_SEXO' => $linha[10],
+            'NO_UF' => $linha[11],
+            'NO_MUNICIPIO' => $linha[12],
+            'NO_ENDERECO' => $linha[13],
+            'NU_CEP' => $linha[14],
         ];
 
-
-
-$resultadoIntercalado = [];
-
-for ($i = 0; $i < count($dadosContrato); $i++)
-{
-    $resultadoIntercalado[] = $dadosContrato[$i];
-
-    if (isset($linhaModificada[$i]))
-    {
-        $resultadoIntercalado[] = $linhaModificada[$i];
-    }
-
-}
-    //$resultadoIntercalado = Contrato::all();
-     print_r(' | ');
-     print_r($resultadoIntercalado[0]);
-     print_r(' | ');
-     print_r($resultadoIntercalado[1]);
-     print_r(' | ');
-     print_r($resultadoIntercalado[2]);
-     print_r(' | ');
-     print_r('                      ');
-     print_r($resultadoIntercalado[3]);
-     print_r(' | ');
-     print_r('                      ');
-     print_r($resultadoIntercalado[4]);
-     print_r(' | ');
-     print_r('                      ');
-     print_r($resultadoIntercalado[5]);
-     print_r(' | ');
-     print_r('                      ');
-     print_r($resultadoIntercalado[6]);
-     print_r('|');
-     print_r('                      ');
-     print_r($resultadoIntercalado[7]);
-     print_r(' | ');
-     print_r($resultadoIntercalado[8]);
-     print_r(' | ');
-     print_r($resultadoIntercalado[9]);
-     print_r(' | ');
-     print_r($resultadoIntercalado[10]);
-     print_r(' | ');
-     print_r($resultadoIntercalado[11]);
-     print_r(' | ');
-     print_r($resultadoIntercalado[12]);
-     print_r(' | ');
-     print_r($resultadoIntercalado[13]);
-     print_r(' | ');
-     print_r($resultadoIntercalado[14]);
-     print_r(' | ');
-
-
-     
-
-    //return view('contratos.tabela', ['dados' => $resultadoIntercalado == Contrato::all()]);
-
-
-        //print_r($dadosContrato);
-       // print_r($linhaModificada);
-        // Inserir dados na tabela 'contratos
-        //DB::table('contratos')->insert($dadosContrato);
-        //DB::table('contratos')->insert($linhaModificada);
-       //return DB::table('contratos')->insert($resultadoIntercalado);
+        // Inserir dados na tabela 'contratos'
+        DB::table('contratos')->insert($dadosContrato);
     }
 }
 }

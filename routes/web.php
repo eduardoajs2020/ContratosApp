@@ -16,14 +16,10 @@ Route::put   ('/contratos/{id}',          [ContratoController::class, 'update'  
 Route::delete('/contratos/{id}',          [ContratoController::class, 'destroy'    ])->name('contratos.destroy'     );
 Route::get   ('/contratos/exportar-csv',  [ContratoController::class, 'exportarCSV'])->name('contratos.exportarCSV' );
 Route::post  ('/contratos/importar-csv',  [ContratoController::class, 'importarCSV'])->name('contratos.importar-csv');
-Route::get   ('/mostrarTabela',           [ContratoController::class, 'mostrarTabela'])->name('contratos.importarParaBanco');
+Route::get   ('/contratos/exportar    ',  [ContratoController::class, 'exportarCSV'])->name('contratos.exportar-csv');
 
 //Views
 Route::get   ('/importArchive',           [FrontController::class, 'importArchive' ])->name('importArchive'         );
-Route::post  ('/importarCSV',             [FrontController::class, 'importarCSV'   ])->name('importarCSV'           );
-Route::get   ('/exportarCSV',             [FrontController::class, 'exportarCSV'   ])->name('exportarCSV'           );
-Route::get   ('/exportarPDF',             [FrontController::class, 'exportarPDF'   ])->name('exportarPDF'           );
-Route::get   ('/exportarHTML',            [FrontController::class, 'exportarHTML'  ])->name('exportarHTML'          );
 
 
 

@@ -32,7 +32,7 @@
                     <a class="nav-link" href="#">Contratos</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('contratos.importArchive') }}">Importar Contratos</a>
+                    <a class="nav-link" href="{{ route('home') }}">Importar Contratos</a>
                 </li>
 
                 <li class="nav-item">
@@ -43,6 +43,18 @@
         </div>
     </nav>
 
+<!-- Exibir mensagens de sucesso ou erro -->
+    @if (session('sucesso'))
+        <div class="alert alert-success">
+            {{ session('sucesso') }}
+        </div>
+    @endif
+
+    @if (session('erro'))
+        <div class="alert alert-danger">
+            {{ session('erro') }}
+        </div>
+    @endif
 
 
     <h1 class="mb-4">Pesquisar Contratos</h1>
@@ -108,10 +120,10 @@
             </tbody>
         </table>
         <div class="mt-3">
-            <form action="{{ route('contratos.exportarCSV') }}" method="GET">
+            <!--form action="{{ route('contratos.exportarCSV') }}" method="GET">
                 @csrf
                 <button type="submit" class="btn btn-primary">Exportar Contratos para CSV</button>
-            </form>
+            </form-->
         </div>
 
     </div>
