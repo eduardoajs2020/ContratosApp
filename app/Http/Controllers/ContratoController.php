@@ -176,8 +176,8 @@ private function importarParaBanco($dadosCSV)
 
     // Remover a primeira linha (cabeçalho)
 
-    $cabecalho = array_shift($dadosCSV);
-
+     array_shift($dadosCSV);
+    
 
     foreach ($dadosCSV as $linha) {
 
@@ -201,7 +201,13 @@ private function importarParaBanco($dadosCSV)
         ];
 
         // Inserir dados na tabela 'contratos'
-        DB::table('contratos')->insert($dadosContrato);
-    }
-}
+        if (DB::table('contratos')->insert($dadosContrato)){
+
+            return redirect()->route('contratos.index')->with('sucesso', 'Dados incluídos no sistema com sucesso!');
+        }
+        else{
+            return redirect()->route('contratos.index')->with('erro', 'Erro ao incluir dados, verifique a compatibilidade do arquivo!');
+        }
+     }
+  }
 }

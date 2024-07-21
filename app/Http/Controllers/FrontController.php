@@ -19,4 +19,19 @@ class FrontController extends Controller
         }
     }
 
-}
+    public function trateErros()
+    {
+        if ($arquivo = file_get_contents(resource_path('views/contratos/errors.custom.blade.php')))
+        {
+            return response($arquivo, 200, ['Content-Type' => 'text/html']);
+        }
+        else {
+
+            return response('Arquivo não encontrado', 404);
+            
+           }
+
+        }
+    }
+
+
